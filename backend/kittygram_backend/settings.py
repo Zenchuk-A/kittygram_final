@@ -1,16 +1,20 @@
 # flake8: noqa
 import os
+from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
+from ast import literal_eval
+
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$'
+load_dotenv()
 
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
-ALLOWED_HOSTS = ['127.0.0.1',
-                 'localhost',
-                 'kittygram-zen.sytes.net']
+DEBUG = False
+
+ALLOWED_HOSTS = literal_eval(os.getenv("ALLOWED_HOSTS", "[]"))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -98,7 +102,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'collected_static'
+STATIC_ROOT = "/backend_static/static"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

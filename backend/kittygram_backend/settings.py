@@ -2,7 +2,6 @@
 import os
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
-from ast import literal_eval
 
 from pathlib import Path
 
@@ -12,13 +11,10 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "[]")
-try:
-    ALLOWED_HOSTS = literal_eval(allowed_hosts_env)
-except (SyntaxError, ValueError):
-    ALLOWED_HOSTS = []
+allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',')] if allowed_hosts_env else []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
